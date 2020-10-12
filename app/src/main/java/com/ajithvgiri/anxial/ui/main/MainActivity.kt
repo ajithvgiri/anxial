@@ -29,7 +29,7 @@ class MainActivity : BaseActivity() {
         mainViewModel.brandResult.observe(this, Observer {
             val brandResult = it ?: return@Observer
 
-            progressBar.visibility = View.VISIBLE
+            progressBar.visibility = View.GONE
 
             if (brandResult.error != null) {
                 showError(brandResult.error)
@@ -54,6 +54,7 @@ class MainActivity : BaseActivity() {
             viewPager.adapter = sectionsPagerAdapter
             val tabs: TabLayout = findViewById(R.id.tabs)
             tabs.visibility = View.VISIBLE
+            viewPager.visibility = View.VISIBLE
             tabs.setupWithViewPager(viewPager)
         }
 

@@ -14,10 +14,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Anxial"
         android:usesCleartextTraffic="true">
+
+        <activity android:name=".ui.product.ProductDetails" />
+
         <activity
             android:name=".ui.main.MainActivity"
             android:label="@string/title_activity_main"
-            android:theme="@style/Theme.Anxial.NoActionBar"></activity>
+            android:theme="@style/Theme.Anxial.NoActionBar" />
+
         <activity
             android:name=".ui.login.LoginActivity"
             android:theme="@style/Theme.Anxial.NoActionBar">

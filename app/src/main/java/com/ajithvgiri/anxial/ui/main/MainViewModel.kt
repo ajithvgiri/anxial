@@ -14,13 +14,11 @@ import javax.inject.Inject
 
 class MainViewModel @Inject constructor(var homeRepository: HomeRepository) : ViewModel() {
 
-    private val _index = MutableLiveData<Int>()
-    val text: LiveData<String> = Transformations.map(_index) {
-        "Hello world from section: $it"
-    }
-
     private val _brandResult = MutableLiveData<BrandResult>()
     val brandResult: LiveData<BrandResult> = _brandResult
+
+    private val _productResult = MutableLiveData<ProductResult>()
+    val productResult: LiveData<ProductResult> = _productResult
 
     init {
         brand()
@@ -37,7 +35,14 @@ class MainViewModel @Inject constructor(var homeRepository: HomeRepository) : Vi
         }
     }
 
-    fun setIndex(index: Int) {
-        _index.value = index
+    fun getAllProducts() {
+        homeRepository.products { result ->
+            if (result is Result.Success) {
+                _productResult.value = ProductResult(success = result.data)
+            } else if (result is Result.Error) {
+                _productResult.value = ProductResult(error = result.exception.localizedMessage)
+            }
+        }
     }
+
 }
