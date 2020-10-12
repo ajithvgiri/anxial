@@ -2,6 +2,7 @@ package com.ajithvgiri.anxial.data.datasource
 
 import android.app.Application
 import com.ajithvgiri.anxial.data.Result
+import com.ajithvgiri.anxial.data.model.BrandResponse
 import com.ajithvgiri.anxial.data.model.LoggedInUser
 import com.ajithvgiri.anxial.data.model.LoginRequest
 import com.ajithvgiri.anxial.data.model.LoginResponse
@@ -18,37 +19,25 @@ import timber.log.Timber
 import java.io.IOException
 import javax.inject.Inject
 
-/**
- * Class that handles authentication w/ login credentials and retrieves user information.
- */
-class LoginDataSource @Inject constructor(application: Application) {
+class HomeDataSource @Inject constructor(application: Application) {
 
-    val api: ApiInterface = RetrofitService(application).createService(ApiInterface::class.java)
-    val preferences = PreferenceHelper.prefs(application)
+    private val api: ApiInterface = RetrofitService(application).createService(ApiInterface::class.java)
+    private val preferences = PreferenceHelper.prefs(application)
 
-    val currentUser = if (preferences[PREFERENCE_TOKEN, ""]?.isNotEmpty() == true) {
-        preferences[PREFERENCE_TOKEN, ""]?.let { token ->
-            LoggedInUser("", token)
-        }
-    } else {
-        null
-    }
-
-    fun login(username: String, password: String, result: (Result<LoginResponse>) -> Unit) {
+    fun brands(result: (Result<BrandResponse>) -> Unit) {
         try {
-            val loginRequest = LoginRequest(username, password)
-            api.login(loginRequest).enqueue(object : Callback<LoginResponse> {
-                override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+            val token = "bearer ${preferences[PREFERENCE_TOKEN, ""]}"
+            api.brands(token).enqueue(object : Callback<BrandResponse> {
+                override fun onFailure(call: Call<BrandResponse>, t: Throwable) {
                     Timber.e("error ${t.localizedMessage}")
                     result(Result.Error(IOException(t.localizedMessage)))
                 }
 
                 override fun onResponse(
-                    call: Call<LoginResponse>,
-                    response: Response<LoginResponse>
+                    call: Call<BrandResponse>,
+                    response: Response<BrandResponse>
                 ) {
                     if (response.isSuccessful && response.body() != null) {
-                        preferences[PREFERENCE_TOKEN] = response.body()?.data?.access_token
                         result(Result.Success(response.body()!!))
                     } else {
                         result(Result.Error(IOException(response.body().toString())))
@@ -60,7 +49,4 @@ class LoginDataSource @Inject constructor(application: Application) {
         }
     }
 
-    fun logout() {
-        // TODO: revoke authentication
-    }
 }

@@ -5,5 +5,5 @@ package com.ajithvgiri.anxial.data.model
  */
 data class LoggedInUser(
         val userId: String,
-        val displayName: String
+        val token: String
 )

@@ -1,5 +1,6 @@
-package com.ajithvgiri.anxial.data
+package com.ajithvgiri.anxial.data.repository
 
+import com.ajithvgiri.anxial.data.Result
 import com.ajithvgiri.anxial.data.datasource.LoginDataSource
 import com.ajithvgiri.anxial.data.model.LoggedInUser
 import com.ajithvgiri.anxial.data.model.LoginResponse
@@ -13,8 +14,8 @@ import javax.inject.Inject
 class LoginRepository @Inject constructor(val dataSource: LoginDataSource) {
 
     // in-memory cache of the loggedInUser object
-    var user: LoggedInUser? = null
-        private set
+    var user: LoggedInUser?
+        get() = dataSource.currentUser
 
     val isLoggedIn: Boolean
         get() = user != null
@@ -22,7 +23,7 @@ class LoginRepository @Inject constructor(val dataSource: LoginDataSource) {
     init {
         // If user credentials will be cached in local storage, it is recommended it be encrypted
         // @see https://developer.android.com/training/articles/keystore
-        user = null
+        user = dataSource.currentUser
     }
 
     fun logout() {

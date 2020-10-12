@@ -9,15 +9,39 @@ import java.io.Serializable
  */
 @JsonClass(generateAdapter = true)
 data class LoginResponse(
-    var status: Boolean,
-    var code: Int,
-    var data: Data,
-    var error: Error
+    var status: Boolean? = null,
+    var code: Int? = null,
+    var data: LoginData? = null,
+    var error: Error? = null
 ) : Serializable
 
 @JsonClass(generateAdapter = true)
-data class Data(var access_token: String, var token_type: String, var expires_in: Int) :
+data class LoginData(
+    var access_token: String? = null,
+    var token_type: String? = null,
+    var expires_in: Int? = null
+) :
     Serializable
 
 @JsonClass(generateAdapter = true)
-data class Error(var message: String, var code: Int) : Serializable
+data class Error(var message: String? = null, var code: Int? = null) : Serializable
+
+
+@JsonClass(generateAdapter = true)
+data class BrandResponse(
+    var data: List<BrandData> = ArrayList(),
+    var status: Boolean? = null,
+    var code: Int? = null,
+    var error: Error? = null
+) : Serializable
+
+@JsonClass(generateAdapter = true)
+data class BrandData(
+    var id: Int? = null,
+    var name: String? = null,
+    var slug: String? = null,
+    var brand: List<Brand>? = ArrayList()
+)
+
+@JsonClass(generateAdapter = true)
+data class Brand(var id: Int? = null, var name: String? = null, var slug: String? = null)

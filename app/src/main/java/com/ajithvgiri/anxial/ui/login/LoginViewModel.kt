@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import android.util.Patterns
-import com.ajithvgiri.anxial.data.LoginRepository
+import com.ajithvgiri.anxial.data.repository.LoginRepository
 import com.ajithvgiri.anxial.data.Result
 
 import com.ajithvgiri.anxial.R
@@ -19,14 +19,21 @@ class LoginViewModel @Inject constructor(private val loginRepository: LoginRepos
     private val _loginResult = MutableLiveData<LoginResult>()
     val loginResult: LiveData<LoginResult> = _loginResult
 
+    fun checkUserLoggedIn() {
+        if (loginRepository.isLoggedIn){
+            _loginResult.value =
+                LoginResult(success = LoggedInUserView(token = ""))
+        }
+    }
+
     fun login(username: String, password: String) {
         // can be launched in a separate asynchronous job
         loginRepository.login(username, password) { result ->
         if (result is Result.Success) {
             _loginResult.value =
-                LoginResult(success = LoggedInUserView(token = result.data.data.access_token))
-        } else {
-            _loginResult.value = LoginResult(error = R.string.login_failed)
+                LoginResult(success = LoggedInUserView(token = result.data.data?.access_token!!))
+        } else if(result is Result.Error){
+            _loginResult.value = LoginResult(error = result.exception.localizedMessage)
         }
     }
 }

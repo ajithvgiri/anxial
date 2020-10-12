@@ -1,11 +1,9 @@
 package com.ajithvgiri.anxial.ui.login
 
-import android.app.Activity
+import android.content.Intent
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.annotation.StringRes
-import androidx.appcompat.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -13,14 +11,21 @@ import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
-import android.widget.Toast
+import com.ajithvgiri.anxial.ui.main.MainActivity
 
 import com.ajithvgiri.anxial.R
 import com.ajithvgiri.anxial.ui.base.BaseActivity
+import com.ajithvgiri.anxial.utils.showError
 
 class LoginActivity : BaseActivity() {
 
     private lateinit var loginViewModel: LoginViewModel
+
+    override fun onStart() {
+        super.onStart()
+        // Check if user is signed in (non-null) and update UI accordingly.
+        loginViewModel.checkUserLoggedIn()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,7 +58,7 @@ class LoginActivity : BaseActivity() {
 
             loading.visibility = View.GONE
             if (loginResult.error != null) {
-                showLoginFailed(loginResult.error)
+                showError(loginResult.error)
             }
             if (loginResult.success != null) {
                 updateUiWithUser(loginResult.success)
@@ -97,17 +102,10 @@ class LoginActivity : BaseActivity() {
     }
 
     private fun updateUiWithUser(model: LoggedInUserView) {
-        val displayName = model.token
-        // TODO : initiate successful logged in experience
-        Toast.makeText(
-            applicationContext,
-            " $displayName",
-            Toast.LENGTH_LONG
-        ).show()
-    }
-
-    private fun showLoginFailed(@StringRes errorString: Int) {
-        Toast.makeText(applicationContext, errorString, Toast.LENGTH_SHORT).show()
+        val intent = Intent(this@LoginActivity, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(intent)
+        finish()
     }
 }
 
