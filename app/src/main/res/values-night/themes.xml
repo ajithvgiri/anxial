@@ -12,5 +12,24 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="android:windowBackground">@color/colorWindowBackground</item>
+    </style>
+
+    <style name="smallTextStyle">
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textSize">@dimen/smallTextSize</item>
+        <item name="fontFamily">sans-serif</item>
+    </style>
+
+    <style name="mediumTextStyle">
+        <item name="android:textColor">@color/colorTextSecondary</item>
+        <item name="android:textSize">@dimen/mediumTextSize</item>
+        <item name="fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="largeTextStyle">
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textSize">@dimen/largeTextSize</item>
+        <item name="fontFamily">sans-serif-medium</item>
     </style>
 </resources>

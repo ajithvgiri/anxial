@@ -8,8 +8,9 @@ import com.ajithvgiri.anxial.data.LoginRepository
 import com.ajithvgiri.anxial.data.Result
 
 import com.ajithvgiri.anxial.R
+import javax.inject.Inject
 
-class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel() {
+class LoginViewModel @Inject constructor(private val loginRepository: LoginRepository) : ViewModel() {
 
     private val _loginForm = MutableLiveData<LoginFormState>()
     val loginFormState: LiveData<LoginFormState> = _loginForm
@@ -30,7 +31,7 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
 
     fun loginDataChanged(username: String, password: String) {
         if (!isUserNameValid(username)) {
-            _loginForm.value = LoginFormState(usernameError = R.string.invalid_username)
+            _loginForm.value = LoginFormState(usernameError = R.string.invalid_email)
         } else if (!isPasswordValid(password)) {
             _loginForm.value = LoginFormState(passwordError = R.string.invalid_password)
         } else {
