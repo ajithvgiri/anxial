@@ -5,6 +5,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.multidex.BuildConfig
 import androidx.multidex.MultiDex
 import com.ajithvgiri.anxial.di.component.DaggerAppComponent
@@ -30,6 +31,8 @@ class AnxialApplication : Application(), HasAndroidInjector {
 
     override fun onCreate() {
         super.onCreate()
+
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())

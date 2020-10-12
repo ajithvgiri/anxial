@@ -58,10 +58,6 @@ class LoginActivity : BaseActivity() {
             if (loginResult.success != null) {
                 updateUiWithUser(loginResult.success)
             }
-            setResult(Activity.RESULT_OK)
-
-            //Complete and destroy login activity once successful
-            finish()
         })
 
         username.afterTextChanged {
@@ -81,16 +77,19 @@ class LoginActivity : BaseActivity() {
 
             setOnEditorActionListener { _, actionId, _ ->
                 when (actionId) {
-                    EditorInfo.IME_ACTION_DONE ->
+                    EditorInfo.IME_ACTION_DONE -> {
+                        login.isEnabled = false
                         loginViewModel.login(
                             username.text.toString(),
                             password.text.toString()
                         )
+                    }
                 }
                 false
             }
 
             login.setOnClickListener {
+                login.isEnabled = false
                 loading.visibility = View.VISIBLE
                 loginViewModel.login(username.text.toString(), password.text.toString())
             }
@@ -98,7 +97,7 @@ class LoginActivity : BaseActivity() {
     }
 
     private fun updateUiWithUser(model: LoggedInUserView) {
-        val displayName = model.displayName
+        val displayName = model.token
         // TODO : initiate successful logged in experience
         Toast.makeText(
             applicationContext,

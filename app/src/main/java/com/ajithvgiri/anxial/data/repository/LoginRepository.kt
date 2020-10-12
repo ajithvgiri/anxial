@@ -1,6 +1,8 @@
 package com.ajithvgiri.anxial.data
 
+import com.ajithvgiri.anxial.data.datasource.LoginDataSource
 import com.ajithvgiri.anxial.data.model.LoggedInUser
+import com.ajithvgiri.anxial.data.model.LoginResponse
 import javax.inject.Inject
 
 /**
@@ -28,16 +30,8 @@ class LoginRepository @Inject constructor(val dataSource: LoginDataSource) {
         dataSource.logout()
     }
 
-    fun login(username: String, password: String): Result<LoggedInUser> {
-        // handle login
-        val result = dataSource.login(username, password)
-
-        if (result is Result.Success) {
-            setLoggedInUser(result.data)
-        }
-
-        return result
-    }
+    fun login(username: String, password: String, result: (Result<LoginResponse>) -> Unit) =
+        dataSource.login(username, password, result)
 
     private fun setLoggedInUser(loggedInUser: LoggedInUser) {
         this.user = loggedInUser
